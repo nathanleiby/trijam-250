@@ -1,11 +1,10 @@
 extends Node2D
 
 # scenes we will dynamically instantiate
-@export var tileScene: PackedScene
 @export var cardScene: PackedScene
 
 # reusable node references
-@onready var tiles: Node2D = $Board/Tiles
+@onready var board: Board = $Board as Board
 @onready var playerMatDeck: Node2D = $PlayerMat/Deck
 @onready var playerMatHand: Node2D = $PlayerMat/Hand
 @onready var playerMatHandCards: Node2D = $PlayerMat/Hand/Cards
@@ -13,7 +12,6 @@ extends Node2D
 @onready var playerMatHandSelectIndicator: Sprite2D = $PlayerMat/Hand/SelectIndicator
 
 # configuration
-const TILE_SIZE = 64
 const HAND_SIZE = 2
 const DECK_SIZE = 4
 
@@ -35,7 +33,7 @@ func _process(_delta: float) -> void:
 		select_indicator_idx = clamp(select_indicator_idx + 1, 0, max(get_hand_size() - 1, 0))
 	if Input.is_action_just_pressed("accept"):
 		var card_value = play_card(select_indicator_idx)
-		player_position += card_value
+		board.player_position += card_value
 		draw_card()
 
 
@@ -49,10 +47,10 @@ func _pause() -> void:
 
 
 func next_puzzle():
-	generate_board()
+	board.generate_board()
 	generate_deck()
 	generate_hand()
-	player_position = -1
+	board.player_position = -1
 
 func _ready():
 	next_puzzle()
@@ -103,40 +101,6 @@ func play_card(idx: int) -> int:
 
 	return value
 
-func generate_board():
-	# phase (1): generate the underlying data for the board
-	var total_steps: int = 0
-	for i in range(1, DECK_SIZE + 1):
-		total_steps += i
-
-	var _board = Array()
-	_board.resize(total_steps)
-	_board.fill(0)
-
-	for i in range(1, DECK_SIZE + 1):
-		# assign the "bonus tiles" to random position in _board, but
-		# - avoid collisions
-		# - avoid placement last position
-		var pos = randi() % total_steps
-		while _board[pos] != 0 or (pos == total_steps - 1):
-			pos = randi() % total_steps
-		_board[pos] = i
-
-	# phase (2): generate the Node representation of the board
-
-	# purge existing tiles in game board
-	for c in tiles.get_children():
-		tiles.remove_child(c)
-		c.queue_free()
-
-	for i in range(_board.size()):
-		var tile = tileScene.instantiate()
-		tile.position = Vector2(i * TILE_SIZE, 0)
-		tiles.add_child(tile)
-		tile.bonus_value = _board[i]
-		tile.idx_value = i + 1
-
-
 func generate_hand():
 	# remove existing cards
 	for c in playerMatHandCards.get_children():
@@ -146,12 +110,6 @@ func generate_hand():
 	for i in range(HAND_SIZE):
 		draw_card()
 
-
-var player_position = 0:
-	set(value):
-		player_position = value
-		$Board/PlayerToken.position.x = value * TILE_SIZE
-
-
 func _on_next_puzzle_button_pressed() -> void:
 	next_puzzle()
+	$NextPuzzleButton.release_focus()

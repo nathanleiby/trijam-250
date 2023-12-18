@@ -11,12 +11,14 @@ const EXPORT_CONFIG_METADATA_SECTION := "metadata"
 const SETTINGS_FILE := "user://settings.cfg"
 const CONFIG_SETTINGS_SECTION := "settings"
 
+const DECK_SIZE = 4
+
 func _ready() -> void:
 	print_debug("Global ready")
 	Engine.max_fps = 60
 	load_settings()
 	load_game_metadata()
-	
+
 	# hidden by default, can be toggled on in debug mode
 	get_tree().call_group("debug_ui", "hide")
 
