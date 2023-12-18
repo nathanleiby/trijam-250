@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdnyglk1i1cxl"]
+[gd_scene load_steps=9 format=3 uid="uid://bdnyglk1i1cxl"]
 
 [ext_resource type="Script" path="res://gameplay/gameplay.gd" id="1_thqv1"]
 [ext_resource type="PackedScene" uid="uid://cko02oljhiby" path="res://paused/paused.tscn" id="3_w8wrl"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://blv51dfbusyxh" path="res://gameplay/tile.tscn" id="4_8xlo2"]
 [ext_resource type="PackedScene" uid="uid://g2klakbee1i7" path="res://gameplay/card.tscn" id="5_plqfv"]
 [ext_resource type="Texture2D" uid="uid://ceps640a3oola" path="res://assets/chess-queen.png" id="6_pxabc"]
+[ext_resource type="Texture2D" uid="uid://b7uljq6xeuj1d" path="res://assets/upgrade.png" id="7_rsfdq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kf4u1"]
 font_size = 24
@@ -53,6 +54,7 @@ grow_vertical = 2
 color = Color(1, 1, 0, 1)
 
 [node name="Sprite" type="Sprite2D" parent="Board/PlayerToken"]
+modulate = Color(1, 1, 0, 1)
 scale = Vector2(0.125, 0.125)
 texture = ExtResource("6_pxabc")
 
@@ -74,24 +76,17 @@ position = Vector2(192, 2.08165e-12)
 
 [node name="Cards" type="Node2D" parent="PlayerMat/Hand"]
 
-[node name="Card" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
-
-[node name="Card2" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
-position = Vector2(128, 0)
-
-[node name="Card3" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
-visible = false
-position = Vector2(256, 0)
-
-[node name="Card4" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
-visible = false
-position = Vector2(384, 0)
-
 [node name="Label2" type="Label" parent="PlayerMat/Hand"]
 offset_top = 140.0
 offset_right = 42.0
 offset_bottom = 166.0
 text = "Hand"
+
+[node name="SelectIndicator" type="Sprite2D" parent="PlayerMat/Hand"]
+modulate = Color(1, 1, 0, 1)
+position = Vector2(64, 200)
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("7_rsfdq")
 
 [node name="Discard" type="Node2D" parent="PlayerMat"]
 position = Vector2(768, 2.08165e-12)
@@ -140,6 +135,7 @@ layout_mode = 2
 text = "Seed = 1e42a56"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="GUI/Drawer"]
+visible = false
 layout_mode = 2
 
 [node name="PuzzleTitleLabel" type="Label" parent="GUI/Drawer/VBoxContainer2"]
