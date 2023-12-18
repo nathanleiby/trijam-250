@@ -52,3 +52,7 @@ func generate_board():
 		tile.bonus_value = _board[i]
 		tile.idx_value = i + 1
 
+
+func get_tile_value(idx: int) -> int:
+	var tile = tiles.get_child(idx)
+	return tile.bonus_value

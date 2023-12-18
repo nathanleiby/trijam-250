@@ -27,6 +27,11 @@ var deck_size = DECK_SIZE:
 		deck_size = v
 		playerMatDeck.get_node("Label").text = "Deck (" + str(deck_size) + ")"
 
+var score = 0:
+	set(v):
+		score = v
+		$GUI/Drawer/VBoxContainer/PuzzleScoreLabel.text = "Score: " + str(score)
+
 func get_hand_size() -> int:
 	return playerMatHandCards.get_child_count()
 
@@ -43,6 +48,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("accept"):
 		var card_value = play_card(select_indicator_idx)
 		board.player_position += card_value
+		score += board.get_tile_value(board.player_position)
 		draw_card()
 
 
@@ -62,6 +68,7 @@ func next_puzzle():
 	board.player_position = -1
 	discard_count = 0
 	deck_size = deck.size()
+	score = 0
 
 func _ready():
 	next_puzzle()
