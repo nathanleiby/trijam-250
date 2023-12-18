@@ -154,3 +154,12 @@ text = "Time: 32 secs"
 [node name="PuzzleSeedLabel" type="Label" parent="GUI/Drawer/VBoxContainer2"]
 layout_mode = 2
 text = "Seed = 1e42a56"
+
+[node name="NextPuzzleButton" type="Button" parent="."]
+offset_left = 1169.0
+offset_top = 676.0
+offset_right = 1268.0
+offset_bottom = 707.0
+text = "Next Puzzle"
+
+[connection signal="pressed" from="NextPuzzleButton" to="." method="_on_next_puzzle_button_pressed"]

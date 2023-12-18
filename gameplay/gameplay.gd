@@ -18,9 +18,7 @@ const HAND_SIZE = 2
 const DECK_SIZE = 4
 
 # game state
-var board: Array = []
 var deck: Array = []
-var hand: Array = []
 
 func get_hand_size() -> int:
 	return playerMatHandCards.get_child_count()
@@ -32,11 +30,11 @@ var select_indicator_idx = 0:
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("move_left"):
-		select_indicator_idx = clamp(select_indicator_idx - 1, 0, get_hand_size() - 1)
+		select_indicator_idx = clamp(select_indicator_idx - 1, 0, max(get_hand_size() - 1, 0))
 	if Input.is_action_just_pressed("move_right"):
-		select_indicator_idx = clamp(select_indicator_idx + 1, 0, get_hand_size() - 1)
+		select_indicator_idx = clamp(select_indicator_idx + 1, 0, max(get_hand_size() - 1, 0))
 	if Input.is_action_just_pressed("accept"):
-		var card_value = discard_card(select_indicator_idx)
+		var card_value = play_card(select_indicator_idx)
 		player_position += card_value
 		draw_card()
 
@@ -50,25 +48,15 @@ func _pause() -> void:
 	get_tree().paused = true
 
 
-func _ready():
-	# generate _board
-	board = generate_board()
-	for i in range(board.size()):
-		var tile = tileScene.instantiate()
-		tile.position = Vector2(i * TILE_SIZE, 0)
-		tiles.add_child(tile)
-		tile.bonus_value = board[i]
-		tile.idx_value = i + 1
-
-	# generate player setup (deck, hand, ..)
+func next_puzzle():
+	generate_board()
 	generate_deck()
-	for i in range(HAND_SIZE):
-		draw_card()
-
-	# add cards to deck
-	# add cards to discard, later (maybe show a dotted line to start)
-
+	generate_hand()
 	player_position = -1
+
+func _ready():
+	next_puzzle()
+
 
 
 func generate_deck():
@@ -87,16 +75,18 @@ func draw_card():
 	card.card_value = next_card_value
 	playerMatHandCards.add_child(card)
 
-	# relayout all cards in hand
+	_ui_relayout_cards_in_hand()
+
+func _ui_relayout_cards_in_hand():
 	var i = 0
 	for c in playerMatHandCards.get_children():
 		c.position = Vector2(i * 128, 0)
 		i += 1
 
 # returns the card_value of the discarded card
-func discard_card(idx: int) -> int:
-	# game state
-	# var cardNodes: Array[Node] = playerMatHandCards.get_children()
+func play_card(idx: int) -> int:
+	select_indicator_idx = 0
+
 	var cardsChildren = playerMatHandCards.get_children()
 	if cardsChildren.size() == 0:
 		return 0
@@ -106,6 +96,7 @@ func discard_card(idx: int) -> int:
 	playerMatHandCards.remove_child(card)
 	card.queue_free()
 
+	_ui_relayout_cards_in_hand()
 
 	# keep count of discarded cards
 	# playerMatDiscard.add_child(card)
@@ -113,6 +104,7 @@ func discard_card(idx: int) -> int:
 	return value
 
 func generate_board():
+	# phase (1): generate the underlying data for the board
 	var total_steps: int = 0
 	for i in range(1, DECK_SIZE + 1):
 		total_steps += i
@@ -130,10 +122,36 @@ func generate_board():
 			pos = randi() % total_steps
 		_board[pos] = i
 
-	return _board
+	# phase (2): generate the Node representation of the board
+
+	# purge existing tiles in game board
+	for c in tiles.get_children():
+		tiles.remove_child(c)
+		c.queue_free()
+
+	for i in range(_board.size()):
+		var tile = tileScene.instantiate()
+		tile.position = Vector2(i * TILE_SIZE, 0)
+		tiles.add_child(tile)
+		tile.bonus_value = _board[i]
+		tile.idx_value = i + 1
+
+
+func generate_hand():
+	# remove existing cards
+	for c in playerMatHandCards.get_children():
+		playerMatHandCards.remove_child(c)
+		c.queue_free()
+
+	for i in range(HAND_SIZE):
+		draw_card()
 
 
 var player_position = 0:
 	set(value):
 		player_position = value
 		$Board/PlayerToken.position.x = value * TILE_SIZE
+
+
+func _on_next_puzzle_button_pressed() -> void:
+	next_puzzle()
