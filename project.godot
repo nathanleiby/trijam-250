@@ -10,8 +10,13 @@ config_version=5
 
 [application]
 
-config/name="Numba Dance"
-config/description="[Add your description here!]"
+config/name="Number Dance"
+config/description="Choose from the available cards to step forwards that many squares. Try to get as many points as possible by landing on the +X squares.
+
+Compare your score vs idealized scores:
+- \"Card Shark\" = Expected Value
+- \"Lucky Duck\" = Best Possible Score
+"
 run/main_scene="res://gameplay/gameplay.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://assets/icon.svg"

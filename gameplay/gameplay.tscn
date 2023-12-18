@@ -44,7 +44,7 @@ position = Vector2(192, 2.08165e-12)
 
 [node name="Cards" type="Node2D" parent="PlayerMat/Hand"]
 
-[node name="Label2" type="Label" parent="PlayerMat/Hand"]
+[node name="Label" type="Label" parent="PlayerMat/Hand"]
 offset_top = 140.0
 offset_right = 42.0
 offset_bottom = 166.0
@@ -59,7 +59,7 @@ texture = ExtResource("7_rsfdq")
 [node name="Discard" type="Node2D" parent="PlayerMat"]
 position = Vector2(768, 2.08165e-12)
 
-[node name="Discard" type="Label" parent="PlayerMat/Discard"]
+[node name="Label" type="Label" parent="PlayerMat/Discard"]
 offset_top = 140.0
 offset_right = 39.0
 offset_bottom = 166.0

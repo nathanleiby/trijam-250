@@ -17,6 +17,15 @@ const DECK_SIZE = 4
 
 # game state
 var deck: Array = []
+var discard_count = 0:
+	set(v):
+		discard_count = v
+		playerMatDiscard.get_node("Label").text = "Discard (" + str(discard_count) + ")"
+
+var deck_size = DECK_SIZE:
+	set(v):
+		deck_size = v
+		playerMatDeck.get_node("Label").text = "Deck (" + str(deck_size) + ")"
 
 func get_hand_size() -> int:
 	return playerMatHandCards.get_child_count()
@@ -51,6 +60,8 @@ func next_puzzle():
 	generate_deck()
 	generate_hand()
 	board.player_position = -1
+	discard_count = 0
+	deck_size = deck.size()
 
 func _ready():
 	next_puzzle()
@@ -73,6 +84,7 @@ func draw_card():
 	card.card_value = next_card_value
 	playerMatHandCards.add_child(card)
 
+	deck_size = deck.size()
 	_ui_relayout_cards_in_hand()
 
 func _ui_relayout_cards_in_hand():
@@ -97,7 +109,7 @@ func play_card(idx: int) -> int:
 	_ui_relayout_cards_in_hand()
 
 	# keep count of discarded cards
-	# playerMatDiscard.add_child(card)
+	discard_count += 1
 
 	return value
 
