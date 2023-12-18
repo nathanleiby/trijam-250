@@ -1,0 +1,78 @@
+[gd_scene load_steps=4 format=3 uid="uid://g2klakbee1i7"]
+
+[ext_resource type="Script" path="res://gameplay/card.gd" id="1_kadrk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_adlqf"]
+font_size = 64
+font_color = Color(0, 0.188235, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rlqhf"]
+font_size = 24
+font_color = Color(0, 0.188235, 1, 1)
+
+[node name="Card" type="Node2D"]
+script = ExtResource("1_kadrk")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 120.0
+offset_bottom = 140.0
+
+[node name="Border" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.670588, 0.670588, 0.670588, 1)
+
+[node name="Fill" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BigLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "?"
+label_settings = SubResource("LabelSettings_adlqf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopRightLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 37.0
+grow_horizontal = 2
+text = "?"
+label_settings = SubResource("LabelSettings_rlqhf")
+horizontal_alignment = 2
+
+[node name="BottomLeftLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -37.0
+offset_right = 60.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "?"
+label_settings = SubResource("LabelSettings_rlqhf")

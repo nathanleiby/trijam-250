@@ -1,52 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdnyglk1i1cxl"]
+[gd_scene load_steps=8 format=3 uid="uid://bdnyglk1i1cxl"]
 
 [ext_resource type="Script" path="res://gameplay/gameplay.gd" id="1_thqv1"]
-[ext_resource type="Texture2D" uid="uid://bgprycbqd2tbx" path="res://assets/icon.svg" id="2_o7ako"]
 [ext_resource type="PackedScene" uid="uid://cko02oljhiby" path="res://paused/paused.tscn" id="3_w8wrl"]
 [ext_resource type="PackedScene" uid="uid://cee5dna3u27jf" path="res://assets/select_sfx.tscn" id="4_7kf0b"]
+[ext_resource type="PackedScene" uid="uid://blv51dfbusyxh" path="res://gameplay/tile.tscn" id="4_8xlo2"]
+[ext_resource type="PackedScene" uid="uid://g2klakbee1i7" path="res://gameplay/card.tscn" id="5_plqfv"]
+[ext_resource type="Texture2D" uid="uid://ceps640a3oola" path="res://assets/chess-queen.png" id="6_pxabc"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kf4u1"]
+font_size = 24
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_thqv1")
-
-[node name="Icon" type="Sprite2D" parent="."]
-position = Vector2(655, 453)
-texture = ExtResource("2_o7ako")
-
-[node name="Stack" type="VFlowContainer" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 478.0
-offset_top = 115.0
-offset_right = 815.0
-offset_bottom = 722.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-metadata/_edit_group_ = true
-
-[node name="Title" type="Label" parent="Stack"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"HeaderLarge"
-text = "GAMEPLAY"
-
-[node name="Instructions" type="Label" parent="Stack"]
-layout_mode = 2
-size_flags_vertical = 1
-text = "Get started with Godot Skeleton by replacing this Gameplay scene with your own."
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="PauseInstructions" type="Label" parent="Stack"]
-layout_mode = 2
-text = "Press START, P, or ESC to open pause menu."
-horizontal_alignment = 1
-
-[node name="LinkButton" type="LinkButton" parent="Stack"]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "View Template Source"
-uri = "https://github.com/brettchalupa/godot_skeleton"
+tileScene = ExtResource("4_8xlo2")
+cardScene = ExtResource("5_plqfv")
 
 [node name="Paused" parent="." instance=ExtResource("3_w8wrl")]
 visible = false
@@ -57,3 +24,137 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="SelectSfx" parent="." instance=ExtResource("4_7kf0b")]
+
+[node name="Board" type="Node2D" parent="."]
+position = Vector2(128, 128)
+
+[node name="Tiles" type="Node2D" parent="Board"]
+
+[node name="PlayerToken" type="Node2D" parent="Board"]
+position = Vector2(2.08165e-12, -64)
+
+[node name="Control" type="Control" parent="Board/PlayerToken"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Board/PlayerToken/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_top = -36.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Sprite" type="Sprite2D" parent="Board/PlayerToken"]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("6_pxabc")
+
+[node name="PlayerMat" type="Node2D" parent="."]
+position = Vector2(64, 384)
+
+[node name="Deck" type="Node2D" parent="PlayerMat"]
+
+[node name="Card" parent="PlayerMat/Deck" instance=ExtResource("5_plqfv")]
+
+[node name="Label" type="Label" parent="PlayerMat/Deck"]
+offset_top = 140.0
+offset_right = 39.0
+offset_bottom = 166.0
+text = "Deck"
+
+[node name="Hand" type="Node2D" parent="PlayerMat"]
+position = Vector2(192, 2.08165e-12)
+
+[node name="Cards" type="Node2D" parent="PlayerMat/Hand"]
+
+[node name="Card" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
+
+[node name="Card2" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
+position = Vector2(128, 0)
+
+[node name="Card3" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
+visible = false
+position = Vector2(256, 0)
+
+[node name="Card4" parent="PlayerMat/Hand/Cards" instance=ExtResource("5_plqfv")]
+visible = false
+position = Vector2(384, 0)
+
+[node name="Label2" type="Label" parent="PlayerMat/Hand"]
+offset_top = 140.0
+offset_right = 42.0
+offset_bottom = 166.0
+text = "Hand"
+
+[node name="Discard" type="Node2D" parent="PlayerMat"]
+position = Vector2(768, 2.08165e-12)
+
+[node name="Discard" type="Label" parent="PlayerMat/Discard"]
+offset_top = 140.0
+offset_right = 39.0
+offset_bottom = 166.0
+text = "Discard"
+
+[node name="Card" parent="PlayerMat/Discard" instance=ExtResource("5_plqfv")]
+
+[node name="GUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+metadata/_edit_lock_ = true
+
+[node name="Drawer" type="VBoxContainer" parent="GUI"]
+layout_mode = 2
+offset_left = 1097.0
+offset_top = 2.0
+offset_right = 1280.0
+offset_bottom = 389.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Drawer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="PuzzleTitleLabel" type="Label" parent="GUI/Drawer/VBoxContainer"]
+layout_mode = 2
+text = "Puzzle Stats"
+label_settings = SubResource("LabelSettings_kf4u1")
+
+[node name="PuzzleScoreLabel" type="Label" parent="GUI/Drawer/VBoxContainer"]
+layout_mode = 2
+text = "Score: 0"
+
+[node name="PuzzleTimeLabel" type="Label" parent="GUI/Drawer/VBoxContainer"]
+layout_mode = 2
+text = "Time: 32 secs"
+
+[node name="PuzzleSeedLabel" type="Label" parent="GUI/Drawer/VBoxContainer"]
+layout_mode = 2
+text = "Seed = 1e42a56"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/Drawer"]
+layout_mode = 2
+
+[node name="PuzzleTitleLabel" type="Label" parent="GUI/Drawer/VBoxContainer2"]
+layout_mode = 2
+text = "Tourney Stats"
+label_settings = SubResource("LabelSettings_kf4u1")
+
+[node name="PuzzleScoreLabel" type="Label" parent="GUI/Drawer/VBoxContainer2"]
+layout_mode = 2
+text = "Score: 0"
+
+[node name="PuzzleTimeLabel" type="Label" parent="GUI/Drawer/VBoxContainer2"]
+layout_mode = 2
+text = "Time: 32 secs"
+
+[node name="PuzzleSeedLabel" type="Label" parent="GUI/Drawer/VBoxContainer2"]
+layout_mode = 2
+text = "Seed = 1e42a56"
